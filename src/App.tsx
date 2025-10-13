@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Menu as MenuIcon, X as CloseIcon, QrCode, Play, Tag, Shield, Zap, Star, Database, BarChart2 } from "lucide-react";
+import { Menu as MenuIcon, X as CloseIcon, QrCode, Play, Tag, Shield, Zap, Star, Database, BarChart2, MapPin, TrendingUp  } from "lucide-react";
 
 function Section({ id, className = "", children }) {
   return (
@@ -168,6 +168,7 @@ export default function PuzzleBITE() {
         .hero-card:hover img { transform: scale(1.1); }
 
         .gradient-text { background: linear-gradient(90deg, #ffffff, #ffde6a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; }
+        .card-founder { height: 220vh; max-height: 850px; }
 
         .input { width: 100%; padding: 0.85rem 1rem; border-radius: 0.75rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; outline: none; }
         .input::placeholder { color: rgba(255,255,255,0.7); }
@@ -177,16 +178,13 @@ export default function PuzzleBITE() {
 
       {/* NAV */}
       <nav ref={navRef}>
-        <img
-          src="https://raw.githubusercontent.com/Loki-Singh/puzzleBiteWeb/main/PuzzleBITE_Log__Transparent.png"
-          alt="PuzzleBITE Logo"
-        />
+        <img src="https://raw.githubusercontent.com/Loki-Singh/puzzleBiteWeb/main/PuzzleBITE_Log__Transparent.png" alt="PuzzleBITE Logo" />
         {menuOpen ? (
           <CloseIcon className="menu-btn w-8 h-8" onClick={() => setMenuOpen(false)} />
         ) : (
           <MenuIcon className="menu-btn w-8 h-8" onClick={() => setMenuOpen(true)} />
         )}
-        <ul className={menuOpen ? "visible" : "hidden"}>
+        <ul className={menuOpen ? 'visible' : 'hidden'}>
           {sections.map((id) => (
             <li key={id}>
               <a href={`#${id}`} className={activeSection === id ? "active" : ""} onClick={handleLinkClick}>
@@ -195,160 +193,159 @@ export default function PuzzleBITE() {
             </li>
           ))}
           <li>
-            <a href="#contact" className="btn-yellow" onClick={handleLinkClick}>
-              Book Demo
-            </a>
+            <a href="#contact" className="btn-yellow" onClick={handleLinkClick}>Book Demo</a>
           </li>
         </ul>
       </nav>
-
-      {/* HERO */}
       <Section id="home" className="flex flex-col md:flex-row items-center justify-center text-white text-left px-10">
         <div className="md:w-1/2 hero-text-enter">
-          <h1 className="text-6xl font-extrabold mb-6 gradient-text">
-            Turn waiting time into engagement opportunities
-          </h1>
-          <p className="text-xl mb-8 max-w-lg">
-            PuzzleBITE helps cafes and restaurants keep guests entertained with fun puzzles and challenges — while
-            boosting venue revenue.
-          </p>
-          <a href="#contact" className="rounded-xl px-6 py-3 font-semibold btn-yellow inline-block" onClick={handleLinkClick}>
-            Get Started
-          </a>
+          <h1 className="text-6xl font-extrabold mb-6 gradient-text ">Turn waiting time into engagement opportunities</h1>
+          <p className="text-xl mb-8 max-w-lg gradient-text">PuzzleBITE helps cafes and restaurants keep guests entertained with fun puzzles and challenges — while boosting venue revenue.</p>
+          <a href="#contact" className="rounded-xl px-6 py-3 font-semibold btn-gradient inline-block" onClick={handleLinkClick}>Get Started</a>
         </div>
         <div className="md:w-1/2 flex justify-center mt-10 md:mt-0 hero-img-enter">
           <div className="hero-card">
-            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80" alt="Hero visual" />
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="Hero visual" />
           </div>
         </div>
       </Section>
-
-      {/* HOW IT WORKS */}
       <Section id="how" className="text-white">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-extrabold gradient-text">How it works</h2>
-          <p className="mt-3 text-lg text-white/90">Gamified engagement tools that delight customers and drive retention.</p>
+          <p className="mt-3 text-lg text-white/90 gradient-text">Gamified engagement tools that delight customers and drive retention.</p>
         </div>
         <div className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {[
-            { title: "Scan QR", description: "Guests scan a QR to see exciting wait-time discounts.", Icon: QrCode, image: featureImages[0] },
-            { title: "Play Challenges", description: "Crack puzzles & riddles to unlock rewards.", Icon: Play, image: featureImages[1] },
-            { title: "Earn Discounts", description: "Discount coupons redeemable now or later.", Icon: Tag, image: featureImages[2] }
-          ].map((f, i) => (
-            <Card key={i} image={f.image} title={f.title} description={f.description} Icon={f.Icon} />
+            { title: "Scan QR", description: "Guests scan a QR code to see exciting wait time discounts/offers.", Icon: QrCode, image: featureImages[0]},
+            { title: "Play Challenges", description: "Crack the puzzles & riddles challenge.", Icon: Play, image: featureImages[1]},
+            { title: "Earn Discounts", description: "Earn the discount/offer coupons to be redeemed now or later.", Icon: Tag, image: featureImages[2]}
+          ].map((f, idx) => (
+            <Card key={idx} image={f.image} title={f.title} description={f.description} Icon={f.Icon} parallax />
           ))}
         </div>
       </Section>
 
-      {/* FEATURES */}
       <Section id="features" className="text-white">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-extrabold gradient-text">Features</h2>
-          <p className="mt-3 text-lg text-white/90">Never-before features to turn abysmal waiting into delight.</p>
+          <p className="mt-3 text-lg text-white/90 gradient-text">Never before features to get rid of abysmal waiting time.</p>
         </div>
         <div className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {[
-            { title: "Gamified discount engine", description: "Interactive deals — not passive coupons.", Icon: Shield },
-            { title: "Multi-category puzzles", description: "Logic, trivia, coding & more.", Icon: Zap },
-            { title: "Dashboards", description: "Track usage, redemptions & ROI.", Icon: Star },
-            { title: "Live Feed", description: "Real-time events & updates.", Icon: Database },
-            { title: "Performance pricing", description: "Subscriptions + per-puzzle.", Icon: BarChart2 }
-          ].map((f, i) => (
-            <Card key={i} image={featureImages[i % featureImages.length]} title={f.title} description={f.description} Icon={f.Icon} />
+            { title: "Gamified discount engine", description: "Fun, interactive way to earn deals—not just passive coupons", Icon: Shield },
+            { title: "Multi-category puzzles", description: "Puzzles tailored to diners’ preferences (coding, trivia, logic)", Icon: Zap },
+            { title: "Dashboards", description: "Enables restaurants to track usage, redemptions, and ROI", Icon: Star },
+            { title: "Live Feed", description: "Real-time events and updates for Social & viral hooks.", Icon: Database },
+            { title: "Performance-aligned pricing", description: "Mix of subscriptions and per-puzzle commissions ensures risk-sharing.", Icon: BarChart2 }
+          ].map((f, idx) => (
+            <Card key={idx} image={featureImages[idx]} title={f.title} description={f.description} Icon={f.Icon} parallax />
           ))}
         </div>
       </Section>
 
-      {/* WHY */}
       <Section id="why" className="text-white">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-extrabold gradient-text">Why PuzzleBITE</h2>
-          <p className="mt-3 text-lg text-white/90">We turn idle time into loyalty, upsells and shareable moments.</p>
+          <p className="mt-3 text-lg text-white/90 gradient-text">Don't just take our word for it, this is what we do best.</p>
         </div>
         <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-10">
           {[
-            { title: "Differentiator", description: "First to truly gamify dining waits." },
-            { title: "Delight", description: "Guests feel engaged and rewarded." },
-            { title: "Revenue", description: "Incentives that drive higher spend." }
-          ].map((f, i) => (
-            <div key={i} className="card-img">
-              <img src={featureImages[(i + 2) % featureImages.length]} alt={f.title} />
-              <div className="card-overlay card-padding">
-                <h3 className="text-3xl font-bold mb-2">{f.title}</h3>
-                <p className="text-lg">{f.description}</p>
-              </div>
-            </div>
+            { title: "Differentiator", description: "World's first digital solution to transform waiting time into engagement opportunities.", Icon: MapPin },
+            { title: "Footfall & Revenue Booster", description: "Customers keep coming back to enjoy puzzleBITE's fun based challenges. Experience the repeat footfall & revenue boost like never before", Icon: TrendingUp },
+            { title: "Wait Time Killer", description: "Unlimited Fun & Challenges to keep the customers happily engaged.", Icon: Star }
+          ].map((f, idx) => (
+            <Card key={idx} image={featureImages[idx]} title={f.title} description={f.description} Icon={f.Icon} parallax />
           ))}
         </div>
       </Section>
 
-      {/* PRICING */}
+      
+
       <Section id="pricing" className="text-white">
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-extrabold gradient-text">Simple Pricing for Venues</h2>
-          <p className="mt-3 text-lg text-white/90">Transparent tiers. Blurred prices for demos — ask us for full quotes.</p>
+          <h2 className="text-5xl font-extrabold gradient-text">Simple Pricing</h2>
+          <p className="mt-4 text-lg text-slate-200 gradient-text">Flexible plans tailored for every venue’s needs.</p>
         </div>
         <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-10">
           {[
-            { tier: "Standard", desc: ["Up to 3 puzzles/day", "Basic theming", "Email support"], img: pricingImages[0] },
-            { tier: "Gold", desc: ["Unlimited puzzles", "Custom theming", "Priority support"], img: pricingImages[1] },
-            { tier: "Premium", desc: ["Multi-venue", "Advanced analytics", "SLA & onboarding"], img: pricingImages[2] }
-          ].map((p, i) => (
-            <div key={i} className="card-img">
-              <img src={p.img} alt={p.tier} />
-              <div className="card-overlay card-padding">
-                <h3 className="text-3xl font-bold mb-2">{p.tier}</h3>
-                <p className="text-xl mb-4 blurred-text">₹ xx,xxx / month</p>
-                <ul className="space-y-2 mb-6">
-                  {p.desc.map((d, j) => (
-                    <li key={j} className="list-disc list-inside">{d}</li>
-                  ))}
-                </ul>
-                <a href="#contact" className="btn-yellow rounded-xl px-5 py-2 font-semibold" onClick={handleLinkClick}>Request Pricing</a>
-              </div>
-            </div>
+            {
+              tier: "Standard",
+              features: [
+                "Access to basic puzzle library",
+                "Standard customer engagement reports",
+                "Email support",
+                "Venue branding (basic)",
+              ],
+              price: "4999",
+              img: pricingImages[0]
+            },
+            {
+              tier: "Premium",
+              features: [
+                "Access to full puzzle & challenge library",
+                "Advanced engagement & loyalty analytics",
+                "Priority email & phone support",
+                "Custom venue branding",
+                "Monthly strategy consultation"
+              ],
+              price: "9999",
+              img: pricingImages[1]
+            },
+            {
+              tier: "Gold",
+              features: [
+                "Everything in Premium",
+                "Dedicated account manager",
+                "Exclusive puzzle drops",
+                "API integrations for CRM/POS",
+                "Quarterly in-person strategy session"
+              ],
+              price: "14999",
+              img: pricingImages[2]
+            }
+          ].map((plan) => (
+            <Card
+              key={plan.tier}
+              image={plan.img}
+              title={plan.tier}
+              price={plan.price}
+              description={`Perfect for ${plan.tier.toLowerCase()} operations looking to gamify dining.`}
+              Icon={Star}
+              parallax
+              tall
+            >
+              <ul className="card-features list-disc pl-5 text-lg space-y-2 mb-6">
+                {plan.features.map((f, i) => <li key={i}>{f}</li>)}
+              </ul>
+              <a href="#contact" className="rounded-xl px-5 py-3 font-semibold btn-gradient inline-block" onClick={handleLinkClick}>Choose {plan.tier}</a>
+            </Card>
           ))}
         </div>
       </Section>
-
-      {/* BEHIND PUZZLEBITE */}
       <Section id="behind" className="text-white">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-5xl font-extrabold gradient-text mb-4">Behind PuzzleBITE</h2>
-            <p className="text-lg mb-4">
-              At PuzzleBITE, we believe waiting should never feel like wasted time. The idea sparked in a café: what if every
-              minute of anticipation became a moment of delight? From that spark, PuzzleBITE was born — transforming dining
-              queues into playful engagement through puzzles, riddles and meaningful rewards.
-            </p>
-            <p className="text-lg mb-8">
-              This is more than gamified discounts. It’s hospitality reinvented — where every bored second becomes an
-              opportunity and venues build deeper relationships with guests.
-            </p>
-            <h3 className="text-3xl font-bold gradient-text mb-3">Meet the Founder</h3>
-            <p className="text-lg">
-              <strong>Lokendra Singh</strong> is the founder of PuzzleBITE, with experience in startup strategy, growth and
-              product execution. Passionate about blending technology with engagement, he envisioned PuzzleBITE as a way to
-              turn idle waiting into memorable interaction — delight that serves both the guest and the business.
-            </p>
+            <h2 className="text-3xl font-extrabold gradient-text mb-3">Our Story</h2>
+            <p className="text-lg mb-2"><i>It all began over coffee and contemplation — observing patrons in cafés tapping their phones, glancing at the door, restless during the wait. We asked: What if every minute of anticipation could become a moment of delight?</i></p>
+            <p className="text-lg mb-2"><i>This is more than gamified discounts. It’s hospitality reinvented — where every bored second becomes an opportunity and venues build deeper relationships with guests.</i></p>
+            <p className="text-lg mb-2"><i>From that spark, PuzzleBITE was born — designed to transform dining queues into playful engagement. We embed puzzles, challenges, and incentives directly into the guest experience, helping venues convert waiting time into connection, fun, and loyalty.</i></p>
+            <p className="text-lg mb-2"><i>It’s hospitality reinvented — where every bored second becomes an opportunity, where diners leave smiling, and venues foster deeper relationships.</i></p>
+            <p className="text-lg mb-2"><i>Every puzzle solved, every coupon earned, and every story told fuels our journey — and we’re only just beginning.</i></p>
+            <h3 className="text-3xl font-extrabold gradient-text mb-3">Meet the Founder</h3>
+            <p className="text-lg mb-8"><i><strong>Lokendra Singh</strong> is the visionary behind PuzzleBITE, bringing 19 years of experience in startup strategy, growth, and product execution. With a deep passion for blending technology and engagement, Lokendra saw the untapped potential in transforming idle waiting into meaningful interaction.</i></p>
+
+            <p className="text-lg mb-8"><i>In his professional journey, Lokendra has helped startups scale, created strategic roadmaps, and championed innovation in customer experiences. His mission is clear: make waiting delightful — delight that serves both the guest and the business.</i></p>
+
+            <p className="text-lg mb-8"><i>Under his leadership, PuzzleBITE is not just a product — it’s a brand promise: that every wait can tell a story, and every visit can spark joy.</i></p>
           </div>
           <div>
-            <div className="card-img card-tall">
+            <div className="card-img card-founder">
               <img
                 src={"https://raw.githubusercontent.com/Loki-Singh/puzzleBiteWeb/main/so_so_me.jpg"}
                 alt="Founder: Lokendra Singh"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src =
-                    "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=1600&q=80";
-                }}
+                onError={(e)=>{ e.currentTarget.onerror=null; e.currentTarget.src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=1200&q=80"; }}
               />
-              <div className="card-overlay card-padding flex justify-end items-end">
-                <div>
-                  <h4 className="text-2xl font-bold">Lokendra Singh</h4>
-                  <p className="text-sm opacity-90">Founder & CEO, PuzzleBITE</p>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
