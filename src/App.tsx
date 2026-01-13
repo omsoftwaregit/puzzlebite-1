@@ -181,7 +181,7 @@ export default function PuzzleBITE() {
       ref={ref}
       className="relative rounded-2xl p-8 text-white shadow-xl overflow-hidden"
       style={{
-        backgroundImage: "url('public/stats_background_image.jpg')",   // put the image in public/stats-bg.jpg
+        backgroundImage: "url('https://raw.githubusercontent.com/Loki-Singh/puzzleBiteWeb/main/stats_background_image.jpg')",   // put the image in public/stats-bg.jpg
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
