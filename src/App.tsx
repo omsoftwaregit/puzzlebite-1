@@ -7,6 +7,8 @@ function Section({ id, className = "", children }) {
   );
 }
 
+
+
 function Card({ image, title, price, description, Icon, children, tall }) {
   const fallbackImg =
     "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80";
@@ -32,6 +34,7 @@ function Card({ image, title, price, description, Icon, children, tall }) {
   );
 }
 
+
 export default function PuzzleBITE() {
   // ===== STATE =====
   const sections = useMemo(
@@ -47,6 +50,13 @@ export default function PuzzleBITE() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const FORMSPREE_ENDPOINT = "https://formspree.io/f/mzzjkgya"; // add your Formspree endpoint if desired
+  const [selectedFeature, setSelectedFeature] = useState<null | {
+  title: string;
+  description: string;
+  longDescription: string;
+  Icon: any;
+}>(null);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,6 +94,109 @@ export default function PuzzleBITE() {
       setSending(false);
     }
   };
+
+  function LaunchCountdown() {
+        const launchDate = new Date("2026-02-11T00:00:00").getTime();
+        const [timeLeft, setTimeLeft] = useState({
+          days: 0, hours: 0, minutes: 0, seconds: 0
+        });
+
+        useEffect(() => {
+          const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            if (distance < 0) return;
+
+            setTimeLeft({
+              days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+              hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
+              minutes: Math.floor((distance / (1000 * 60)) % 60),
+              seconds: Math.floor((distance / 1000) % 60),
+            });
+          }, 1000);
+
+          return () => clearInterval(timer);
+        }, []);
+
+        return (
+          
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <p className="text-3xl font-extrabold gradient-text">Launching In</p>
+                <div className="flex gap-4 mt-3 text-center">
+                  {["Days","Hours","Minutes","Seconds"].map((label, i) => {
+                    const values = [timeLeft.days, timeLeft.hours, timeLeft.minutes, timeLeft.seconds];
+                    return (
+                      <div key={label} className="bg-white/20 backdrop-blur rounded-xl px-4 py-2">
+                        <div className="text-3xl font-extrabold">{String(values[i]).padStart(2, "0")}</div>
+                        <div className="text-xs uppercase tracking-wide">{label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+
+            </div>
+          
+        );
+      }
+      
+  function StatCard({ number, suffix, label }: { number: number; suffix: string; label: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setVisible(true),
+      { threshold: 0.6 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    let start = 0;
+    const duration = 1500;
+    const increment = number / (duration / 16);
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= number) {
+        setCount(number);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [visible, number]);
+
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-2xl p-8 text-white shadow-xl overflow-hidden"
+      style={{
+        backgroundImage: "url('public/stats_background_image.jpg')",   // put the image in public/stats-bg.jpg
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="text-5xl font-extrabold gradient-text">
+        {count.toLocaleString()}
+        {suffix}
+      </div>
+      <p className="mt-3 text-white/90 text-lg">{label}</p>
+    </div>
+  );
+}
+    
+
+      
 
   // ===== EFFECTS =====
   useEffect(() => {
@@ -130,7 +243,9 @@ export default function PuzzleBITE() {
     <div className="relative min-h-screen font-sans overflow-y-auto" style={{ background: bgGradient }}>
       <style>{`
         html, body, #root { height: 100%; margin: 0; overflow-x: hidden; }
-        nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem 2rem; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.15); }
+        nav { position: fixed; top: 0; left: 0; width: calc(100% - 20px); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 0.6rem 1.25rem; background: rgba(0, 0, 0, 0); backdrop-filter: blur(5px);  }
+  
+        
         nav img { height: 100px; }
         nav .menu-btn { position: absolute; right: 20px; top: 18px; cursor: pointer; color: white; z-index: 70; transition: transform .2s ease; }
         nav .menu-btn:active { transform: scale(.95); }
@@ -144,6 +259,8 @@ export default function PuzzleBITE() {
         .btn-yellow { background: #ffde6a; color: #3a2a00; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.75rem; transition: transform .3s ease; }
         .btn-yellow:hover { transform: scale(1.05); }
 
+        .btn-gradient { background: #ffde6a; color: #3a2a00; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.75rem; transition: transform .3s ease; }
+        .btn-gradient:hover { transform: scale(1.05); }
         .card-img { border-radius: 1.25rem; overflow: hidden; position: relative; height: 50vh; max-height: 520px; box-shadow: 0 6px 12px rgba(0,0,0,.2); transition: transform .5s ease, box-shadow .5s ease, border .5s ease; }
         .card-tall { height: 65vh; max-height: 720px; }
         .card-padding { padding: 2.2rem !important; }
@@ -169,6 +286,18 @@ export default function PuzzleBITE() {
 
         .gradient-text { background: linear-gradient(90deg, #ffffff, #ffde6a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; }
         .card-founder { height: 220vh; max-height: 850px; }
+
+        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .animate-scaleIn { animation: scaleIn 0.25s ease-out; }
+
+        @keyframes modalIn { 0% { opacity: 0; transform: scale(0.85) translateY(40px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .animate-modalIn { animation: modalIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); }
+
+
+
+        .popular-glow { box-shadow: 0 0 15px rgba(255, 222, 106, 0.8);}
 
         .input { width: 100%; padding: 0.85rem 1rem; border-radius: 0.75rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; outline: none; }
         .input::placeholder { color: rgba(255,255,255,0.7); }
@@ -197,11 +326,14 @@ export default function PuzzleBITE() {
           </li>
         </ul>
       </nav>
+      
       <Section id="home" className="flex flex-col md:flex-row items-center justify-center text-white text-left px-10">
         <div className="md:w-1/2 hero-text-enter">
           <h1 className="text-6xl font-extrabold mb-6 gradient-text ">Turn waiting time into engagement opportunities</h1>
           <p className="text-xl mb-8 max-w-lg gradient-text">PuzzleBITE helps cafes and restaurants keep guests entertained with fun puzzles and challenges — while boosting venue revenue.</p>
-          <a href="#contact" className="rounded-xl px-6 py-3 font-semibold btn-gradient inline-block" onClick={handleLinkClick}>Get Started</a>
+          <LaunchCountdown />
+          <br></br>
+          <a href="#contact" className="rounded-xl px-6 py-3 font-semibold btn-gradient inline-block" onClick={handleLinkClick}>Get Earlybird Offers</a>
         </div>
         <div className="md:w-1/2 flex justify-center mt-10 md:mt-0 hero-img-enter">
           <div className="hero-card">
@@ -209,6 +341,31 @@ export default function PuzzleBITE() {
           </div>
         </div>
       </Section>
+      
+      <section id="traction" className="text-white">
+        <div className="max-w-6xl mx-auto text-center mb-12">
+          <h2 className="text-5xl font-extrabold gradient-text">Early Momentum</h2>
+          <p className="mt-3 text-lg text-white/90 gradient-text">
+            Building scale even before launch.
+          </p>
+        </div>
+
+        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+          <StatCard 
+            number={100000}
+            suffix="+"
+            label="Customers Engaged (Projected)"
+          />
+          <StatCard
+            number={25}
+            suffix=""
+            label="Pilot Cafe Partners"
+          />
+        </div>
+      </section>
+
+      
+
       <Section id="how" className="text-white">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-extrabold gradient-text">How it works</h2>
@@ -230,17 +387,60 @@ export default function PuzzleBITE() {
           <h2 className="text-5xl font-extrabold gradient-text">Features</h2>
           <p className="mt-3 text-lg text-white/90 gradient-text">Never before features to get rid of abysmal waiting time.</p>
         </div>
-        <div className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[
-            { title: "Gamified discount engine", description: "Fun, interactive way to earn deals—not just passive coupons", Icon: Shield },
-            { title: "Multi-category puzzles", description: "Puzzles tailored to diners’ preferences (coding, trivia, logic)", Icon: Zap },
-            { title: "Dashboards", description: "Enables restaurants to track usage, redemptions, and ROI", Icon: Star },
-            { title: "Live Feed", description: "Real-time events and updates for Social & viral hooks.", Icon: Database },
-            { title: "Performance-aligned pricing", description: "Mix of subscriptions and per-puzzle commissions ensures risk-sharing.", Icon: BarChart2 }
-          ].map((f, idx) => (
-            <Card key={idx} image={featureImages[idx]} title={f.title} description={f.description} Icon={f.Icon} parallax />
-          ))}
-        </div>
+       <div className="max-w-6xl mx-auto flex flex-col items-center">
+  {/* First row - 3 cards */}
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+    {[
+  {
+    title: "Gamified discount engine",
+    description: "Fun, interactive way to earn deals—not just passive coupons",
+    longDescription: "Customers pay a small attempt fee to play quick challenges and earn discounts. This makes rewards feel earned, increases redemption joy, and helps cafes recover discount cost through micro-revenue.",
+    Icon: Shield
+  },
+  {
+    title: "Multi-category puzzles",
+    description: "Puzzles tailored to diners’ preferences (coding, trivia, logic)",
+    longDescription: "From logic riddles and trivia to coding mini-challenges and multiplayer games, PuzzleBITE adapts to different user interests and keeps engagement fresh every visit.",
+    Icon: Zap
+  },
+  {
+    title: "Dashboards",
+    description: "Enables restaurants to track usage, redemptions, and ROI",
+    longDescription: "Restaurant owners get real-time visibility into scans, plays, rewards issued, repeat visits, and revenue impact — turning engagement into measurable business intelligence.",
+    Icon: Star
+  }
+].map((f, idx) => (
+  <div key={idx} onClick={() => setSelectedFeature(f)} className="cursor-pointer">
+    <Card image={featureImages[idx]} title={f.title} description={f.description} Icon={f.Icon} parallax />
+  </div>
+))}
+
+  </div>
+
+  {/* Second row - 2 centered cards */}
+  <div className="grid sm:grid-cols-2 gap-10 mt-10 lg:w-2/3">
+    {[
+  {
+    title: "Live Feed",
+    description: "Real-time events and updates for Social & viral hooks.",
+    longDescription: "cafes can publish daily visuals, events, and promotions directly inside the app, turning every customer into a potential social ambassador and driving organic reach.",
+    Icon: Database
+  },
+  {
+    title: "Performance-aligned pricing",
+    description: "Mix of subscriptions and per-puzzle commissions ensures risk-sharing.",
+    longDescription: "Our hybrid model ensures cafes pay in proportion to the value they receive — aligning PuzzleBITE’s success directly with restaurant success.",
+    Icon: BarChart2
+  }
+].map((f, idx) => (
+  <div key={idx + 3} onClick={() => setSelectedFeature(f)} className="cursor-pointer">
+    <Card image={featureImages[idx + 3]} title={f.title} description={f.description} Icon={f.Icon} parallax />
+  </div>
+))}
+
+  </div>
+</div>
+
       </Section>
 
       <Section id="why" className="text-white">
@@ -271,24 +471,25 @@ export default function PuzzleBITE() {
             {
               tier: "Standard",
               features: [
-                "Access to basic puzzle library",
-                "Standard customer engagement reports",
+                "Activate upto 2 offers daily",
+                "Monthly Performance Report",
+                "2 Live feed posts / day",
                 "Email support",
                 "Venue branding (basic)",
               ],
-              price: "4999",
+              price: "₹4,999 / month",
               img: pricingImages[0]
             },
             {
               tier: "Premium",
               features: [
-                "Access to full puzzle & challenge library",
-                "Advanced engagement & loyalty analytics",
-                "Priority email & phone support",
-                "Custom venue branding",
+                "Activate upto 5 offers daily",
+                "Monthly Performance Report",
+                "3 Live feed posts / day",
+                "Analytics module access",
                 "Monthly strategy consultation"
               ],
-              price: "9999",
+              price: "₹7,999 / month",
               img: pricingImages[1]
             },
             {
@@ -297,10 +498,14 @@ export default function PuzzleBITE() {
                 "Everything in Premium",
                 "Dedicated account manager",
                 "Exclusive puzzle drops",
-                "API integrations for CRM/POS",
-                "Quarterly in-person strategy session"
+                "Activate upto 7 offers daily",
+                "Weekly Performance Report",
+                "5 Live feed posts / day",
+                "Analytics module access",
+                "Featured Placement",
+                "Instagram Redirect"
               ],
-              price: "14999",
+              price: "₹10,999 / month",
               img: pricingImages[2]
             }
           ].map((plan) => (
@@ -314,6 +519,18 @@ export default function PuzzleBITE() {
               parallax
               tall
             >
+              {plan.tier === "Gold" && (
+                <div className="absolute top-4 right-4 bg-yellow-400 text-black text-sm font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 popular-glow">
+
+                  Most Popular
+                </div>
+              )}
+
+              <div className="absolute top-4 left-4 bg-[#F75564] text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md">
+                {plan.price}
+              </div>
+
+
               <ul className="card-features list-disc pl-5 text-lg space-y-2 mb-6">
                 {plan.features.map((f, i) => <li key={i}>{f}</li>)}
               </ul>
@@ -326,17 +543,16 @@ export default function PuzzleBITE() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div>
             <h2 className="text-3xl font-extrabold gradient-text mb-3">Our Story</h2>
-            <p className="text-lg mb-2"><i>It all began over coffee and contemplation — observing patrons in cafés tapping their phones, glancing at the door, restless during the wait. We asked: What if every minute of anticipation could become a moment of delight?</i></p>
-            <p className="text-lg mb-2"><i>This is more than gamified discounts. It’s hospitality reinvented — where every bored second becomes an opportunity and venues build deeper relationships with guests.</i></p>
-            <p className="text-lg mb-2"><i>From that spark, PuzzleBITE was born — designed to transform dining queues into playful engagement. We embed puzzles, challenges, and incentives directly into the guest experience, helping venues convert waiting time into connection, fun, and loyalty.</i></p>
-            <p className="text-lg mb-2"><i>It’s hospitality reinvented — where every bored second becomes an opportunity, where diners leave smiling, and venues foster deeper relationships.</i></p>
-            <p className="text-lg mb-2"><i>Every puzzle solved, every coupon earned, and every story told fuels our journey — and we’re only just beginning.</i></p>
+            <p className="text-lg mb-2"><i>It all began over coffee and contemplation, observing patrons in cafes tapping their phones, glancing at the door, restless during the wait. We asked: What if every minute of anticipation could become a moment of delight?</i></p>
+            <p className="text-lg mb-2"><i>This is more than gamified discounts. It’s hospitality reinvented, where every bored second becomes an opportunity and venues build deeper relationships with guests.</i></p>
+            <p className="text-lg mb-2"><i>From that spark, PuzzleBITE was born & designed to transform dining queues into playful engagement. We embed puzzles, challenges, and incentives directly into the guest experience, helping venues convert waiting time into connection, fun, and loyalty.</i></p>
+            <p className="text-lg mb-2"><i>Every puzzle solved, every coupon earned, and every story told fuels our journey,  and we’re only just beginning.</i></p>
             <h3 className="text-3xl font-extrabold gradient-text mb-3">Meet the Founder</h3>
             <p className="text-lg mb-8"><i><strong>Lokendra Singh</strong> is the visionary behind PuzzleBITE, bringing 19 years of experience in startup strategy, growth, and product execution. With a deep passion for blending technology and engagement, Lokendra saw the untapped potential in transforming idle waiting into meaningful interaction.</i></p>
 
-            <p className="text-lg mb-8"><i>In his professional journey, Lokendra has helped startups scale, created strategic roadmaps, and championed innovation in customer experiences. His mission is clear: make waiting delightful — delight that serves both the guest and the business.</i></p>
+            <p className="text-lg mb-8"><i>In his professional journey, Lokendra has helped startups scale, created strategic roadmaps, and championed innovation in customer experiences. His mission is clear: Make waiting delightful, delight that serves both the guest and the business.</i></p>
 
-            <p className="text-lg mb-8"><i>Under his leadership, PuzzleBITE is not just a product — it’s a brand promise: that every wait can tell a story, and every visit can spark joy.</i></p>
+            <p className="text-lg mb-8"><i>Under his leadership, PuzzleBITE is not just a product but a brand promise, that every wait can tell a story, and every visit can spark joy.</i></p>
           </div>
           <div>
             <div className="card-img card-founder">
@@ -376,7 +592,7 @@ export default function PuzzleBITE() {
                 <input
                   type="tel"
                   className="input"
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 ***** *****"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />
@@ -404,6 +620,38 @@ export default function PuzzleBITE() {
         <p className="mt-6 text-white/70 text-sm">
           Direct email: <a className="underline" href="mailto:research@puzzlebite.app">research@puzzlebite.app</a>
         </p>
+
+        {selectedFeature && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300"
+            onClick={() => setSelectedFeature(null)}
+          >
+            <div
+              className="relative max-w-3xl w-[90%] rounded-3xl p-10 text-white shadow-2xl
+                        bg-gradient-to-br from-[#F75564] via-[#FF8A7A] to-[#FFDEA3]
+                        animate-modalIn"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="absolute top-5 right-6 text-white/80 hover:text-white text-2xl"
+                onClick={() => setSelectedFeature(null)}
+              >
+                ✕
+              </button>
+
+              <div className="flex items-center gap-4 mb-6">
+                <selectedFeature.Icon className="w-10 h-10 text-white" />
+                <h3 className="text-3xl font-bold">{selectedFeature.title}</h3>
+              </div>
+
+              <p className="text-lg leading-relaxed text-white/95">
+                {selectedFeature.longDescription}
+              </p>
+            </div>
+          </div>
+        )}
+
+
       </Section>
     </div>
   );
