@@ -5,7 +5,7 @@ function Section({ id, className = "", children }) {
   return (
     <section id={id} className={`scroll-mt-28 min-h-screen py-36 ${className}`}>{children}</section>
   );
-}
+} 
 
 
 
