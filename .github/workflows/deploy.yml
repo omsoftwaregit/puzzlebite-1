@@ -27,6 +27,6 @@ jobs:
       - name: Deploy to S3
         run: |
           # Sync all files to S3, remove old files
-          aws s3 sync ./dist s3://puzzlebite-frontend --delete
+          aws s3 sync ./dist s3://puzzlebite-frontend-on-s3 --delete
           # Upload index.html separately to ensure SPA loads latest JS/CSS
-          aws s3 cp ./dist/index.html s3://puzzlebite-frontend/index.html
+          aws s3 cp ./dist/index.html s3://puzzlebite-frontend-on-s3/index.html
