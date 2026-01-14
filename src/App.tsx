@@ -329,7 +329,7 @@ export default function PuzzleBITE() {
       
       <Section id="home" className="flex flex-col md:flex-row items-center justify-center text-white text-left px-10">
         <div className="md:w-1/2 hero-text-enter">
-          <h1 className="text-6xl font-extrabold mb-6 gradient-text ">Turn waiting time into engagement opportunities</h1>
+          <h1 className="text-6xl font-extrabold mb-6 gradient-text ">Turn waiting time into engagement opportunities.</h1>
           <p className="text-xl mb-8 max-w-lg gradient-text">PuzzleBITE helps cafes and restaurants keep guests entertained with fun puzzles and challenges — while boosting venue revenue.</p>
           <LaunchCountdown />
           <br></br>
