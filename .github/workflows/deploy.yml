@@ -1,32 +1,74 @@
+[17:26] Mayur Randive | Om Software
 name: Deploy React + Vite to S3
+ 
 on:
+
   push:
+
     branches:
+
       - main
+ 
 jobs:
+
   deploy:
+
     name: Build and Deploy
+
     runs-on: ubuntu-latest
+ 
     steps:
+
       - name: Checkout repository
+
         uses: actions/checkout@v3
+ 
       - name: Setup Node.js
+
         uses: actions/setup-node@v3
+
         with:
+
           node-version: 20
+ 
       - name: Install dependencies
+
         run: npm install
+ 
       - name: Build project
+
         run: npm run build
+ 
       - name: Configure AWS credentials
+
         uses: aws-actions/configure-aws-credentials@v2
+
         with:
+
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
           aws-region: ap-south-1
+ 
       - name: Deploy to S3
+
         run: |
-          # Sync all files to S3, remove old files
-          aws s3 sync ./dist s3://puzzlebite-frontend-on-s3 --delete
-          # Upload index.html separately to ensure SPA loads latest JS/CSS
-          aws s3 cp ./dist/index.html s3://puzzlebite-frontend-on-s3/index.html
+
+          # Upload all assets with long cache (hashed files)
+
+          aws s3 sync ./dist s3://puzzlebite-frontend-on-s3 \
+
+            --delete \
+
+            --exclude "index.html" \
+
+            --cache-control "max-age=31536000,immutable"
+ 
+          # Upload index.html with NO cache to avoid blank page
+
+          aws s3 cp ./dist/index.html s3://puzzlebite-frontend-on-s3/index.html \
+
+            --cache-control "no-cache,no-store,must-revalidate"
+
+ 
