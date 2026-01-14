@@ -57,17 +57,13 @@ jobs:
           # Upload all assets with long cache (hashed files)
 
           aws s3 sync ./dist s3://puzzlebite-frontend-on-s3 \
-
             --delete \
-
             --exclude "index.html" \
-
             --cache-control "max-age=31536000,immutable"
  
           # Upload index.html with NO cache to avoid blank page
 
           aws s3 cp ./dist/index.html s3://puzzlebite-frontend-on-s3/index.html \
-
             --cache-control "no-cache,no-store,must-revalidate"
 
  
